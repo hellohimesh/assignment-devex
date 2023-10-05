@@ -1,0 +1,131 @@
+<div id="app-container">
+  <dx-data-grid id="dataGrid" [dataSource]="Products" keyExpr="Product_ID" [allowColumnResizing]="true"
+    [columnAutoWidth]="true" [allowColumnReordering]="true" (onSelectionChanged)="selectProduct($event)"
+    (onExporting)="exportGrid($event)">
+    <dxo-paging [pageSize]="10"> </dxo-paging>
+    <dxo-pager
+      [visible]="true"
+      [allowedPageSizes]="allowedPageSizes"
+      [displayMode]="displayMode"
+      [showPageSizeSelector]="showPageSizeSelector"
+      [showInfo]="showInfo"
+      [showNavigationButtons]="showNavButtons"
+    >
+    </dxo-pager>
+    <!-- <dxo-filter-panel [visible]="true"></dxo-filter-panel> -->
+    <dxo-filter-builder [customOperations]="customOperations" [allowHierarchicalFields]="true">
+    </dxo-filter-builder>
+    <dxo-filter-builder-popup [position]="popupPosition" [(visible)]="showFilter">
+    </dxo-filter-builder-popup>
+    <!-- <dxo-filter-row [visible]="true"></dxo-filter-row> -->
+    <!-- <dxo-header-filter [visible]="true"></dxo-header-filter> -->
+
+    <dxi-column dataField="Product_Name" [fixed]="true">
+      <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dxi-column>
+    <dxi-column dataField="Product_Cost">
+      <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dxi-column>
+    <dxi-column dataField="Product_Sale_Price" [width]="100">
+      <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dxi-column>
+    <dxi-column dataField="Product_Retail_Price" dataType="Number" [width]="100">
+      <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dxi-column>
+    <dxi-column dataField="Product_Current_Inventory"></dxi-column>
+    <dxi-column dataField="Product_Manufacturing" sortOrder="asc">
+      <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dxi-column>
+
+    <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+    <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+    <dxo-filter-row [visible]="true"></dxo-filter-row>
+    <!-- <dxo-search-panel [visible]="true"></dxo-search-panel> -->
+    <dxo-group-panel [visible]="true"></dxo-group-panel>
+    <dxo-selection mode="single"></dxo-selection>
+    <dxo-summary>
+      <dxi-group-item summaryType="count">
+      </dxi-group-item>
+    </dxo-summary>
+    <dxo-editing mode="popup" [allowUpdating]="true" [allowDeleting]="true" [allowAdding]="true">
+    </dxo-editing>
+    <!-- <dxo-grouping [autoExpandAll]="expanded"></dxo-grouping> -->
+    <dxo-toolbar>
+      <dxi-item name="addRowButton" showText="always" location="after"></dxi-item>
+      <!-- <dxi-item name="deleteRowButton" showText="always"></dxi-item> -->
+      <!-- 
+      <dxi-item
+        name="addRowButton"
+        location="before"
+        widget="dxButton"
+        locateInMenu="auto"
+        [options]="addButtonOptions"
+      >
+      </dxi-item> -->
+      <dxi-item name="deleteRowButton" location="before" widget="dxButton" locateInMenu="auto"
+        [options]="deleteButtonOptions">
+      </dxi-item>
+      <dxi-item name="exportButton" location="center"></dxi-item>
+
+      <dxi-item name="filter" location="after" widget="dxButton" locateInMenu="auto" [options]="filterButtonOptions">
+      </dxi-item>
+
+      <!-- <dxi-item name="groupPanel"></dxi-item> -->
+      <!-- <dxi-item location="after">
+            <dx-button
+                [text]="expanded ? 'Collapse All' : 'Expand All'"
+                [width]="136"
+                (onClick)="expanded = !expanded">
+            </dx-button>
+        </dxi-item> -->
+      <dxi-item name="columnChooserButton" location="after"></dxi-item>
+      <dxi-item name="searchPanel" location="after"></dxi-item>
+
+
+
+    </dxo-toolbar>
+
+    <dxo-export [enabled]="true" [formats]="['xlsx', 'pdf']">
+    </dxo-export>
+
+
+  </dx-data-grid>
+
+  <p id="selected-Product" *ngIf="selectedProduct">
+    Selected Product: {{ selectedProduct.Product_Name }}
+    {{selectedProduct.catalog}}
+  </p>
+  <div class="">
+    <dx-tab-panel *ngIf="selectedProduct" [selectedIndex]="selectedTabIndex">
+
+      <dxi-item title="Catalog Images">
+
+        <div class="product-images">
+          <img [src]="'data:image/png;base64,'+selectedProduct.catalog.Product_Image1" alt="Product Image">
+          <img [src]="'data:image/png;base64,'+selectedProduct.catalog.Product_Image2" alt="Product Image">
+          <img [src]="'data:image/png;base64,'+selectedProduct.catalog.Product_Image3" alt="Product Image">
+          <img [src]="'data:image/png;base64,'+selectedProduct.catalog.Product_Image4" alt="Product Image">
+        </div>
+
+      </dxi-item>
+
+      <dxi-item title="Sales and Opportunities  ">
+
+        <div class="sales-graph">
+          <dx-chart [dataSource]="selectedProduct.salesAndOpportunities" [title]="chartTitle">
+            <dxi-series argumentField="Year" valueField="Sale" type="bar" name="Sales" color="#b1556b"></dxi-series>
+            <dxi-series argumentField="year" type="bar" name="Opportunity" valueField="Opportunity" color="#007BFF">
+            </dxi-series>
+            <dxo-argument-axis>
+              <dxo-label format="decimal"></dxo-label>
+            </dxo-argument-axis>
+            <dxi-value-axis>
+              <dxo-label format="currency"></dxo-label>
+            </dxi-value-axis>
+          </dx-chart>
+        </div>
+      </dxi-item>
+
+    </dx-tab-panel>
+  </div>
+</div>

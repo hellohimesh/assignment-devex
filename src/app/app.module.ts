@@ -1,0 +1,25 @@
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+
+import { AppComponent } from './app.component';
+import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
+import { DxButtonModule } from 'devextreme-angular/ui/button';
+import { DxTabsModule, DxChartModule } from 'devextreme-angular';
+import { DxTabPanelModule } from 'devextreme-angular';
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    DxDataGridModule,
+    DxButtonModule,
+    DxTabsModule,
+    DxChartModule,
+    DxTabPanelModule
+
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
